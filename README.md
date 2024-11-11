@@ -4,11 +4,11 @@ El objetivo es comparar la eficiencia de estos métodos en términos de precisi�
 Para realizar este proyecto se está utilizando Python como lenguaje de programación, la librería matplotlib para graficar la tendencia de las soluciones y la librería mpmath para manejar los números
 
 - **Ecuación de Primer Orden:**  
-  \ y^2 + y(x+1)/x  
+   y^2 + y(x+1)/x  
   **Condición inicial**: \( y(1) = 4 \)
 
 - **Ecuación de Segundo Orden:**  
-  \ y'' - 4y' + 4y = \cos(x)
+   y'' - 4y' + 4y = \cos(x)
   **Condiciones iniciales**: \( y(0) = 0 \), \( y'(0) = 1 \)
 
 - **Sistema de Ecuaciones Diferenciales:**  
