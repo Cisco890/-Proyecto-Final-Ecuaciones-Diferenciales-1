@@ -44,7 +44,7 @@ Retorna:
 
 def rk4o1(f, y0, x0, xf, h):#se define la función rk4 para la ecuación diferencial de primer orden
     n = int((xf - x0) / h) + 1  # número de los pasos
-    x = [mp.mpf(x0 + i * h) for i in range(n)]  # Valores de x con mpmath
+    x = [mp.mpf(x0 + i * h) for i in range(n)]  # Valores de x 
     y = [mp.mpf(y0)]  # valores de y
     
     for i in range(n - 1):  # definición de la ecuación RK4 y sus valores K
@@ -57,12 +57,12 @@ def rk4o1(f, y0, x0, xf, h):#se define la función rk4 para la ecuación diferen
         
     return x, y
 
-def rk4o2(f, y0, yprima0, x0, xf, h):
+def rk4o2(f, y0, yprima0, x0, xf, h):#se define la función rk4 para la ecuación diferencial de segundo orden
 
-    n = int((xf - x0) / h) + 1
-    x = [mp.mpf(x0 + i * h) for i in range(n)]
-    y = [mp.mpf(y0)]
-    yprima = [mp.mpf(yprima0)]
+    n = int((xf - x0) / h) + 1# número de los pasos
+    x = [mp.mpf(x0 + i * h) for i in range(n)]# valores de x
+    y = [mp.mpf(y0)]# valores de y
+    yprima = [mp.mpf(yprima0)]# valores de y'
     
     for i in range(n - 1):
         # Calcular k para y' 
@@ -83,6 +83,28 @@ def rk4o2(f, y0, yprima0, x0, xf, h):
     
     return x, y, yprima
 
+def rk4s(fs, y0, x0, xf, h):  # se define la función rk4 para sistemas de ecuaciones
+    n = int((xf - x0) / h) + 1  # número de los pasos
+    x = [mp.mpf(x0 + i * h) for i in range(n)]  # valores de x
+    y = [[mp.mpf(val)] for val in y0]  # Lista para almacenar valores de cada variable del sistema en cada paso
+
+    # Inicializar cada lista de y con un tamaño de `n`
+    for i in range(len(y)):
+        y[i] = [y[i][0]] * n  # Inicializamos cada sublista con el tamaño `n`
+
+    for i in range(n - 1):
+        y_values = [y_var[i] for y_var in y]  # Valores actuales de cada variable en este paso
+        # Calcular k para y 
+        k1 = [h * dydx for dydx in fs(x[i], y_values)]
+        k2 = [h * dydx for dydx in fs(x[i] + h / 2, [y_val + k1_j / 2 for y_val, k1_j in zip(y_values, k1)])]
+        k3 = [h * dydx for dydx in fs(x[i] + h / 2, [y_val + k2_j / 2 for y_val, k2_j in zip(y_values, k2)])]
+        k4 = [h * dydx for dydx in fs(x[i] + h, [y_val + k3_j for y_val, k3_j in zip(y_values, k3)])]
+
+        for j in range(len(y)):
+            y[j][i + 1] = y[j][i] + (k1[j] + 2 * k2[j] + 2 * k3[j] + k4[j]) / 6
+
+    return x, y
+
 def menuRK4():  # Se encarga de crear el menú de opciones para el método numérico RK4
     while True:
         # Solicita que el usuario ingrese el valor h que desea probar
@@ -98,16 +120,16 @@ def menuRK4():  # Se encarga de crear el menú de opciones para el método numé
 
     while True:
         print("\nEcuaciones Diferenciales:")
-        print("1. dy/dx = y^2 + y(x+1)/x")
+        print("1. y' = y^2 + y(x+1)/x")
         print("2. y'' - 4y' + 4y = cos(x)")
-        print("3. c")
+        print("3. x' = x - y , y' = x + 2y")
         print("4. Salir de RK4")
         
         tipo_operacion = input("Seleccione una operación: ")
         
         if tipo_operacion == "1":
 
-            def f(x, y):# Definir la función para dy/dx = y^2 + y(x+1)/x"
+            def f(x, y):# Definir la función para y' = y^2 + y(x+1)/x"
                 x = mp.mpf(x)
                 y = mp.mpf(y)
                 return y**2 + (y * (x + 1)) / x
@@ -127,10 +149,10 @@ def menuRK4():  # Se encarga de crear el menú de opciones para el método numé
             y_float = [float(yi) for yi in y]
 
 
-            plt.plot(x_float, y_float, label="Solución RK4", color="green")# de la línea 127 a la 138 se da formato a la gráfica
+            plt.plot(x_float, y_float, label="Solución RK4", color="green")# de la línea 152 a la 163 se da formato a la gráfica
             plt.xlabel("x")
             plt.ylabel("y")
-            plt.title('Método de Runge-Kutta de cuarto orden $dy/dx = y^2 + y(x+1)/x$')
+            plt.title("Método de Runge-Kutta de cuarto orden para $y'= y^2 + y(x+1)/x$")
 
             # Aplica la escala logarítmica en el eje y
             plt.yscale('log')
@@ -148,7 +170,7 @@ def menuRK4():  # Se encarga de crear el menú de opciones para el método numé
             y0 = mp.mpf(0)       # definir los valores iniciales requeridos para la función 
             yprima0 = mp.mpf(1)  
             x0 = mp.mpf(0)       
-            xf = mp.mpf(10)      
+            xf = mp.mpf(2)      
             h = mp.mpf(h)      
 
             x, y, yprima = rk4o2(f2, y0, yprima0, x0, xf, h)#llamar a la función que resuelve ed de segundo orden
@@ -160,7 +182,7 @@ def menuRK4():  # Se encarga de crear el menú de opciones para el método numé
             x_float = [float(xi) for xi in x]# transforma los valores a float para que matplotlib los pueda trabajar
             y_float = [float(yi) for yi in y]
 
-            plt.plot(x_float, y_float, label="Solución RK4", color="green")# de la línea 156 a la 162 se da formato a la gráfica
+            plt.plot(x_float, y_float, label="Solución RK4", color="green")# de la línea 185 a la 191 se da formato a la gráfica
             plt.xlabel("x")
             plt.ylabel("y")
             plt.title("Método de Runge-Kutta de cuarto orden para $y'' - 4y' + 4y = \cos(x)$")
@@ -169,7 +191,37 @@ def menuRK4():  # Se encarga de crear el menú de opciones para el método numé
             plt.show()
                         
         elif tipo_operacion == "3":
-            print("Operación c no implementada.")
+            # Definir la función para x' = x - y , y' = x + 2y
+            
+            def sistema(x, y):
+                y1, y2 = y   
+                y1prima = y1 - y2
+                y2prima = y1 + 2 * y2
+                return [y1prima, y2prima]
+
+            h = h  # definir los valores iniciales requeridos para la función
+            y0 = [2, 1]  # x(0) = 2, y(0) = 1
+            x0 = 0
+            xf = 5
+
+            x, y = rk4s(sistema, y0, x0, xf, h)#llamar a la función que resuelve sistemas de ed
+
+            x_float = [float(xi) for xi in x]# transforma los valores a float para que matplotlib los pueda trabajar
+            y1_float = [float(yi) for yi in y[0]]  
+            y2_float = [float(yi) for yi in y[1]]
+            
+                        # Imprimir resultados en la consola
+            for xi, y1i, y2i in zip(x_float, y1_float, y2_float):
+                print(f"x = {xi}, y1 = {y1i}, y2 = {y2i}")
+
+            plt.plot(x_float, y1_float, label="x(t)", color="green")# de la línea 217 a la 224 se da formato a la gráfica
+            plt.plot(x_float, y2_float, label="y(t)", color="springgreen")
+            plt.xlabel("t")
+            plt.ylabel("Valores de x(t) y y(t)")
+            plt.title("Método de Runge-Kutta de cuarto orden para $x' = x - y , y' = x + 2y$")
+            plt.legend()
+            plt.grid(True)
+            plt.show()
             
         elif tipo_operacion == "4":
             break  # Salir del menú de operaciones
