@@ -9,7 +9,7 @@ Para realizar este proyecto se está utilizando Python como lenguaje de programa
 
 - **Ecuación de Segundo Orden:**  
    y'' - 4y' + 4y = \cos(x)
-  **PVI**: \( y(1) = 4 \)
+  **PVI**: \( y(0) = 0 \), \( y'(0) = 1 \)
 
 - **Sistema de Ecuaciones Diferenciales:**  
    x' = x - y  
@@ -18,7 +18,7 @@ Para realizar este proyecto se está utilizando Python como lenguaje de programa
 
 
 
-Autores: 
+**Autores:** 
 Fernando Hernández - 23645, 
 Fernando Rueda – 23748, 
 Juan Francisco Martínez - 23617 
