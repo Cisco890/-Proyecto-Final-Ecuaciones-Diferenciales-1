@@ -11,6 +11,6 @@ Sistema de ecuaciones x' = x - y , y' = x + 2y  PVI x(0)=2  y(0)=1
 
 
 Autores: 
-Fernando Hernández - 23645 
-Fernando Rueda – 23748 
+Fernando Hernández - 23645, 
+Fernando Rueda – 23748, 
 Juan Francisco Martínez - 23617 
