@@ -4,16 +4,16 @@ El objetivo es comparar la eficiencia de estos métodos en términos de precisi�
 Para realizar este proyecto se está utilizando Python como lenguaje de programación, la librería matplotlib para graficar la tendencia de las soluciones y la librería mpmath para manejar los números
 
 - **Ecuación de Primer Orden:**  
-  \ y^2 + \y^2 + y(x+1)/x \  
+   y^2 + \y^2 + y(x+1)/x   
   **PVI:** \( y(1) = 4 \)
 
 - **Ecuación de Segundo Orden:**  
-  \ y'' - 4y' + 4y = \cos(x) \  
+   y'' - 4y' + 4y = cos(x)   
   **PVI:** \( y(0) = 0 \), ( y'(0) = 1 \)
 
 - **Sistema de Ecuaciones Diferenciales:**  
-  \x' = x - y \  
-  \ y' = x + 2y \  
+  x' = x - y   
+   y' = x + 2y   
   **PVI:** \( x(0) = 2 \), ( y(0) = 1 \)
 
 ---
