@@ -1,7 +1,7 @@
 # -Proyecto-Final-Ecuaciones-Diferenciales-1
-Programa que realiza los métodos numéricos iterativos RK4 y Adams-Bashforth-Moulton para resolver ed de primer y segundo orden al igual que un sistema de ecuaciones 
+Programa que realiza los métodos numéricos iterativos RK4 y Adams-Bashforth-Moulton para resolver ed de primer y segundo orden al igual que un sistema de ecuaciones. 
 El objetivo es comparar la eficiencia de estos métodos en términos de precisión y rendimiento para resolver diferentes tipos de ecuaciones diferenciales.
-Para realizar este proyecto se está utilizando Python como lenguaje de programación, la librería matplotlib para graficar la tendencia de las soluciones y la librería mpmath para manejar los números
+Para realizar este proyecto se está utilizando Python como lenguaje de programación, la librería matplotlib para graficar la tendencia de las soluciones y la librería mpmath para manejar los números.
 
 - **Ecuación de Primer Orden:**  
    y^2 + \y^2 + y(x+1)/x   
