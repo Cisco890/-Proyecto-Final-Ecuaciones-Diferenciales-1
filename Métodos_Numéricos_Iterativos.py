@@ -199,11 +199,15 @@ def abms(fs, y0, x0, xf, h):
 def menuRK4():  # Se encarga de crear el menú de opciones para el método numérico RK4
     while True:
         # Solicita que el usuario ingrese el valor h que desea probar
-        h_valor = input("Ingrese el valor h que desea (en números): ").strip()
+        h_valor = input("Ingrese el valor h que desea (entre 0.01 y 1): ").strip()
         
         try:
             h_valor = float(h_valor)  # Intenta convertir a número
-            break  # Salir del bucle si es un número válido
+            # Verifica que esté en el rango deseado
+            if 0.01 <= h_valor <= 1:
+                break  # Salir del bucle si el número está en el rango
+            else:
+                print("Por favor, ingrese un valor entre 0.01 y 1.")
         except ValueError:
             print("Por favor, ingrese un número válido.")
     
@@ -317,33 +321,44 @@ def menuRK4():  # Se encarga de crear el menú de opciones para el método numé
             
 
         elif tipo_operacion == "4":
+
             while True:
-                h_valor = input("Ingrese el valor h que desea (en números): ").strip()
+                # Solicita que el usuario ingrese el valor h que desea probar
+                h_valor = input("Ingrese el valor h que desea (entre 0.01 y 1): ").strip()
+                
                 try:
-                    h_valor = float(h_valor)
-                    h = h_valor
-                    break
+                    h_valor = float(h_valor)  # Intenta convertir a número
+                    # Verifica que esté en el rango deseado
+                    if 0.01 <= h_valor <= 1:
+                        break  # Salir del bucle si el número está en el rango
+                    else:
+                        print("Por favor, ingrese un valor entre 0.01 y 1.")
                 except ValueError:
                     print("Por favor, ingrese un número válido.")
-                    
+    
+                    h = h_valor                    
         elif tipo_operacion == "5":
             break  # Salir del menú de operaciones
         else:
             print("Valor inválido en el menú, seleccione del 1 al 5.")
             
 def menuABM():  # Se encarga de crear el menú de opciones para el método numérico ABM
+
     while True:
         # Solicita que el usuario ingrese el valor h que desea probar
-        h_valor = input("Ingrese el valor h que desea (en números): ").strip()
+        h_valor = input("Ingrese el valor h que desea (entre 0.01 y 1): ").strip()
         
         try:
             h_valor = float(h_valor)  # Intenta convertir a número
-            break  # Salir del bucle si es un número válido
+            # Verifica que esté en el rango deseado
+            if 0.01 <= h_valor <= 1:
+                break  # Salir del bucle si el número está en el rango
+            else:
+                print("Por favor, ingrese un valor entre 0.01 y 1.")
         except ValueError:
             print("Por favor, ingrese un número válido.")
     
     h = h_valor
-
     while True:
         print("\nEcuaciones Diferenciales para resolver con ABM:")
         print("1. y' = y^2 + y(x+1)/x")
@@ -449,14 +464,22 @@ def menuABM():  # Se encarga de crear el menú de opciones para el método numé
             
             
         elif tipo_operacion == "4":
+
             while True:
-                h_valor = input("Ingrese el valor h que desea (en números): ").strip()
+                # Solicita que el usuario ingrese el valor h que desea probar
+                h_valor = input("Ingrese el valor h que desea (entre 0.01 y 1): ").strip()
+                
                 try:
-                    h_valor = float(h_valor)
-                    h = h_valor
-                    break
+                    h_valor = float(h_valor)  # Intenta convertir a número
+                    # Verifica que esté en el rango deseado
+                    if 0.01 <= h_valor <= 1:
+                        break  # Salir del bucle si el número está en el rango
+                    else:
+                        print("Por favor, ingrese un valor entre 0.01 y 1.")
                 except ValueError:
                     print("Por favor, ingrese un número válido.")
+    
+                    h = h_valor                    
                     
         elif tipo_operacion == "5":
             break  # Salir del menú de operaciones
