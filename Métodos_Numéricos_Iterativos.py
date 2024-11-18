@@ -225,38 +225,69 @@ def menuRK4():  # Se encarga de crear el menú de opciones para el método numé
         
         if tipo_operacion == "1":
 
-            def f(x, y):# Definir la función para y' = y^2 + y(x+1)/x"
+            def f(x, y):  # Definir la función para y' = y^2 + y(x+1)/x
                 x = mp.mpf(x)
                 y = mp.mpf(y)
                 return y**2 + (y * (x + 1)) / x
 
-            y0 = mp.mpf(4)# definir los valores iniciales requeridos para la función 
+            y0 = mp.mpf(4)  # Definir los valores iniciales requeridos para la función
             x0 = mp.mpf(1)
-            xf = mp.mpf(2)
+            xf = mp.mpf(2)  # Asintota inicia en 1.21, por lo que el metodo RK4 hace una aproximacion de una tendencia sin asintota
             h = mp.mpf(h)
 
-            x, y = rk4o1(f, y0, x0, xf, h)#llamar a la función que resuelve ed de primer orden 
+            x, y = rk4o1(f, y0, x0, xf, h)  # Llamar a la función que resuelve la ecuación diferencial de primer orden
+            
+            # Definir la función analítica
+            def y_analitica(x):
+                numerator = 4 * mp.exp(x) * x
+                denominator = mp.exp(1) - 4 * mp.exp(x) * (x - 1)
+                return numerator / denominator
 
+            # Calcular los valores de la solución analítica para cada valor de x
+            y_analitica_vals = [y_analitica(xi) for xi in x]
+
+            # Imprimir primero los valores de y_RK4 y luego los de y_analitica
             for xi, yi in zip(x, y):
-                print(f"x = {xi}, y = {yi}")    # imprime los valores (x,y) en la consola            
+                print(f"x = {xi}, y_RK4 = {yi}")    # imprime los valores (x,y) en la consola      
+            print()
+            for xi, yi_analitica in zip(x, y_analitica_vals):
+                # Siempre imprimir los valores de y_RK4, incluso si es inf
+                print(f"x = {float(xi):.3f}", end=', ')
                 
+                # Imprimir siempre el valor de y_analítica
+                print(f"y_analítica = {float(yi_analitica):.20f}")
 
-            x_float = [float(xi) for xi in x]# transforma los valores a float para que matplotlib los pueda trabajar 
+            # Convertir los valores a float para usarlos en matplotlib
+            x_float = [float(xi) for xi in x]
             y_float = [float(yi) for yi in y]
+            y_analitica_float = [float(yi) for yi in y_analitica_vals]
 
-            # de la línea 244 a la 255 se da formato a la gráfica
-            plt.plot(x_float, y_float, label="Solución RK4", color="powderblue")# El color "powderblue" representa a las respuestas obtenidas por el método numérico
+            # De la línea x a la x se da formato a la gráfica
+            plt.figure(figsize=(10, 12)) 
+
+            # Primer gráfico: Solo la solución analítica 
+            plt.subplot(2, 1, 1)  # Subgráfico en la primera posición
+            plt.plot(x_float, y_analitica_float, linestyle="solid", label="Solución Analítica", color="darkcyan")# El color "darkcyan" representa a las respuestas analíticas
+
+            plt.title("Solución Analítica")
+            plt.xlabel("x")
+            plt.ylabel("y")
+            plt.grid(True)
+            plt.legend()
+
+            # Segundo gráfico: Solo la solución RK4 
+            plt.subplot(2, 1, 2)  # Subgráfico en la segunda posición
+            plt.plot(x_float, y_float, label="Solución RK4", color="powderblue")  # El color "powderblue" representa a las respuestas obtenidas por el método numérico
             plt.xlabel("x")
             plt.ylabel("y")
             plt.title("Método de Runge-Kutta de cuarto orden para $y'= y^2 + y(x+1)/x$")
-
-            # Aplica la escala logarítmica en el eje y
             plt.yscale('log')
-
             plt.legend()
+            plt.subplots_adjust(hspace=0.5)
             plt.grid(True)
 
             plt.show()
+
             
         elif tipo_operacion == "2":
             # Definir la función para y'' - 4y' + 4y = cos(x)
@@ -271,31 +302,37 @@ def menuRK4():  # Se encarga de crear el menú de opciones para el método numé
 
             x, y, yprima = rk4o2(f2, y0, yprima0, x0, xf, h)#llamar a la función que resuelve ed de segundo orden
             
-            for xi, yi in zip(x, y):# imprime los valores (x,y) en la consola  
-                print(f"x = {float(xi)}, y = {float(yi)}")
-            x_data = [0, 0.4, 0.8, 1.2, 1.6, 2.0]
-            y_data = [0, 1, 4, 17, 53, 146]
+             # Evaluar la solución analítica en los mismos puntos de x
+            def y_analitica(x):
+                term1 = ((-3 / 25) + (7 / 5) * x) * mp.exp(2 * x)
+                term2 = (3 / 25) * mp.cos(x)
+                term3 = -(4 / 25) * mp.sin(x)
+                return term1 + term2 + term3
 
-            x_float = [float(xi) for xi in x]# transforma los valores a float para que matplotlib los pueda trabajar
+            # Evaluar y analítica en los valores de x obtenidos del método RK4
+            y_analitica_vals = [y_analitica(xi) for xi in x]
+
+            # Imprimir los valores de x, y (RK4), y_analítica
+            for xi, yi_rk4, yi_analitica in zip(x, y, y_analitica_vals):
+                print(f"x = {float(xi):.3f}, y_RK4 = {float(yi_rk4):.10f}, y_analítica = {float(yi_analitica):.10f}")
+
+            # Convertir los valores a float para usarlos en matplotlib
+            x_float = [float(xi) for xi in x]
             y_float = [float(yi) for yi in y]
+            y_analitica_float = [float(yi) for yi in y_analitica_vals]
+                        
             
             # de la línea x a la x se da formato a la gráfica
-            
-            plt.subplot(2, 1, 1)  # Subplot 1 (2 filas, 1 columna, posición 1)
-            plt.plot(x_data, y_data, linestyle='-', label="Solución Analítica", color="darkcyan")# El color "darkcyan" representa a las respuestas obtenidas por la solución analítica
-            plt.title("Solución Analítica para $y'' - 4y' + 4y = \cos(x)$")
+                        
+            # Gráfica superpuesta
+            plt.plot(x_float, y_analitica_float, linestyle= "solid", label="Solución Analítica", color="darkcyan")  # Solución Analítica
+            plt.plot(x_float, y_float, linestyle="dashdot", label="Solución RK4", color="powderblue")  # Solución RK4
+
+            plt.title("Comparación entre Solución Analítica y Método RK4 para $y'' - 4y' + 4y = \cos(x)$")
             plt.xlabel("x")
             plt.ylabel("y")
             plt.grid(True)
             plt.legend()
-            
-            plt.subplot(2, 1, 2)# Subplot 2 (2 filas, 1 columna, posición 2)
-            plt.plot(x_float, y_float, label="Solución RK4", color="powderblue")# El color "powderblue" representa a las respuestas obtenidas por el método numérico
-            plt.xlabel("x")
-            plt.ylabel("y")
-            plt.title("Método de Runge-Kutta de cuarto orden para $y'' - 4y' + 4y = \cos(x)$")
-            plt.legend()
-            plt.grid(True)
             plt.tight_layout()
             plt.show()
             
@@ -395,25 +432,52 @@ def menuABM():  # Se encarga de crear el menú de opciones para el método numé
 
             x, y = abmo1(f, y0, x0, xf, h)#llamar a la función que resuelve ed de primer orden 
 
-            for xi, yi in zip(x, y):
-                print(f"x = {xi}, y = {yi}")    # imprime los valores (x,y) en la consola      
-                
-            x_float = [float(xi) for xi in x]# transforma los valores a float para que matplotlib los pueda trabajar 
-            y_float = [float(yi) for yi in y]
+            # Definir la función analítica
+            def y_analitica(x):
+                numerator = 4 * mp.exp(x) * x
+                denominator = mp.exp(1) - 4 * mp.exp(x) * (x - 1)
+                return numerator / denominator
 
-            # de la línea 377 a la 388 se da formato a la gráfica
-            plt.plot(x_float, y_float, label="Solución ABM", color="violet")# El color "violet" representa a las respuestas obtenidas por el método numérico
+            # Calcular los valores de la solución analítica para cada valor de x
+            y_analitica_vals = [y_analitica(xi) for xi in x]
+
+            # Imprimir primero los valores de y_ABM y luego los de y_analitica
+            for xi, yi in zip(x, y):
+                print(f"x = {xi}, y_ABM = {yi}")         
+            print()
+            for xi, yi_analitica in zip(x, y_analitica_vals):
+                print(f"x = {float(xi):.3f}", end=', ')
+                print(f"y_analítica = {float(yi_analitica):.20f}")
+
+            # Convertir los valores a float para usarlos en matplotlib
+            x_float = [float(xi) for xi in x]
+            y_float = [float(yi) for yi in y]
+            y_analitica_float = [float(yi) for yi in y_analitica_vals]
+
+            # De la línea x a la x se da formato a la gráfica
+            plt.figure(figsize=(10, 12)) 
+
+            # Primer gráfico: Solo la solución analítica 
+            plt.subplot(2, 1, 1)  # Subgráfico en la primera posición
+            plt.plot(x_float, y_analitica_float, linestyle="solid", label="Solución Analítica", color="purple")# El color "purple" representa a las respuestas analíticas
+
+            plt.title("Solución Analítica")
+            plt.xlabel("x")
+            plt.ylabel("y")
+            plt.grid(True)
+            plt.legend()
+
+            # Segundo gráfico: Solo la solución ABM 
+            plt.subplot(2, 1, 2)  # Subgráfico en la segunda posición
+            plt.plot(x_float, y_float, label="Solución ABM", color="violet")  # El color "violet" representa a las respuestas obtenidas por el método numérico
             plt.xlabel("x")
             plt.ylabel("y")
             plt.title("Método de Adams-Bashforth-Moulton para $y'= y^2 + y(x+1)/x$")
-
-            # Aplica la escala logarítmica en el eje y
             plt.yscale('log')
-
             plt.legend()
+            plt.subplots_adjust(hspace=0.5)
             plt.grid(True)
 
-            plt.tight_layout()
             plt.show()
             
         elif tipo_operacion == "2":
@@ -429,32 +493,37 @@ def menuABM():  # Se encarga de crear el menú de opciones para el método numé
 
             x, y, yprima = abmo2(f2, y0, yprima0, x0, xf, h)#llamar a la función que resuelve ed de segundo orden
             
-            for xi, yi in zip(x, y):# imprime los valores (x,y) en la consola  
-                print(f"x = {float(xi)}, y = {float(yi)}")
+             # Evaluar la solución analítica en los mismos puntos de x
+            def y_analitica(x):
+                term1 = ((-3 / 25) + (7 / 5) * x) * mp.exp(2 * x)
+                term2 = (3 / 25) * mp.cos(x)
+                term3 = -(4 / 25) * mp.sin(x)
+                return term1 + term2 + term3
 
+            # Evaluar y analítica en los valores de x obtenidos del método ABM
+            y_analitica_vals = [y_analitica(xi) for xi in x]
 
-            x_float = [float(xi) for xi in x]# transforma los valores a float para que matplotlib los pueda trabajar
+            # Imprimir los valores de x, y (RK4), y_analítica
+            for xi, yi_rk4, yi_analitica in zip(x, y, y_analitica_vals):
+                print(f"x = {float(xi):.3f}, y_AMB = {float(yi_rk4):.10f}, y_analítica = {float(yi_analitica):.10f}")
+
+            # Convertir los valores a float para usarlos en matplotlib
+            x_float = [float(xi) for xi in x]
             y_float = [float(yi) for yi in y]
-            x_data = [0, 0.4, 0.8, 1.2, 1.6, 2.0]#datos de x en los que se evalua la solución analítica
-            y_data = [0, 1, 4, 17, 53, 146] #datos de y que salen como respuesta de sus respectivos datos en x
+            y_analitica_float = [float(yi) for yi in y_analitica_vals]
+                        
             
             # de la línea x a la x se da formato a la gráfica
-            plt.subplot(2, 1, 1)  # Subplot 1 (2 filas, 1 columna, posición 1)
-            plt.plot(x_data, y_data, linestyle='-', label="Solución Analítica", color="purple")# El color "darkcyan" representa a las respuestas obtenidas por la solución analítica
-            plt.title("Solución Analítica para $y'' - 4y' + 4y = \cos(x)$")
+                        
+            # Gráfica superpuesta
+            plt.plot(x_float, y_analitica_float, linestyle= "solid", label="Solución Analítica", color="purple")  # El color "purple" representa a las respuestas analíticas
+            plt.plot(x_float, y_float, linestyle="dashdot", label="Solución ABM", color="violet") # El color "violet" representa a las respuestas obtenidas por el método numérico
+
+            plt.title("Comparación entre Solución Analítica y Método ABM para $y'' - 4y' + 4y = \cos(x)$")
             plt.xlabel("x")
             plt.ylabel("y")
             plt.grid(True)
             plt.legend()
-            
-            plt.subplot(2, 1, 2) # Subplot 1 (2 filas, 1 columna, posición 2)
-            plt.plot(x_float, y_float, label="Solución ABM", color="violet")# El color "violet" representa a las respuestas obtenidas por el método numérico
-            plt.xlabel("x")
-            plt.ylabel("y")
-            plt.title("Método de Adams-Bashforth-Moulton para $y'' - 4y' + 4y = \cos(x)$")
-            plt.legend()
-            plt.grid(True)
-            
             plt.tight_layout()
             plt.show()
             
