@@ -244,8 +244,8 @@ def menuRK4():  # Se encarga de crear el menú de opciones para el método numé
             x_float = [float(xi) for xi in x]# transforma los valores a float para que matplotlib los pueda trabajar 
             y_float = [float(yi) for yi in y]
 
-
-            plt.plot(x_float, y_float, label="Solución RK4", color="powderblue")# de la línea 244 a la 255 se da formato a la gráfica
+            # de la línea 244 a la 255 se da formato a la gráfica
+            plt.plot(x_float, y_float, label="Solución RK4", color="powderblue")# El color "powderblue" representa a las respuestas obtenidas por el método numérico
             plt.xlabel("x")
             plt.ylabel("y")
             plt.title("Método de Runge-Kutta de cuarto orden para $y'= y^2 + y(x+1)/x$")
@@ -273,19 +273,32 @@ def menuRK4():  # Se encarga de crear el menú de opciones para el método numé
             
             for xi, yi in zip(x, y):# imprime los valores (x,y) en la consola  
                 print(f"x = {float(xi)}, y = {float(yi)}")
-
+            x_data = [0, 0.4, 0.8, 1.2, 1.6, 2.0]
+            y_data = [0, 1, 4, 17, 53, 146]
 
             x_float = [float(xi) for xi in x]# transforma los valores a float para que matplotlib los pueda trabajar
             y_float = [float(yi) for yi in y]
-
-            plt.plot(x_float, y_float, label="Solución RK4", color="powderblue")# de la línea 277 a la 283 se da formato a la gráfica
+            
+            # de la línea x a la x se da formato a la gráfica
+            
+            plt.subplot(2, 1, 1)  # Subplot 1 (2 filas, 1 columna, posición 1)
+            plt.plot(x_data, y_data, linestyle='-', label="Solución Analítica", color="darkcyan")# El color "darkcyan" representa a las respuestas obtenidas por la solución analítica
+            plt.title("Solución Analítica para $y'' - 4y' + 4y = \cos(x)$")
+            plt.xlabel("x")
+            plt.ylabel("y")
+            plt.grid(True)
+            plt.legend()
+            
+            plt.subplot(2, 1, 2)# Subplot 2 (2 filas, 1 columna, posición 2)
+            plt.plot(x_float, y_float, label="Solución RK4", color="powderblue")# El color "powderblue" representa a las respuestas obtenidas por el método numérico
             plt.xlabel("x")
             plt.ylabel("y")
             plt.title("Método de Runge-Kutta de cuarto orden para $y'' - 4y' + 4y = \cos(x)$")
             plt.legend()
             plt.grid(True)
+            plt.tight_layout()
             plt.show()
-                        
+            
         elif tipo_operacion == "3":
             # Definir la función para x' = x - y , y' = x + 2y
             
@@ -309,9 +322,9 @@ def menuRK4():  # Se encarga de crear el menú de opciones para el método numé
                         # Imprimir resultados en la consola
             for xi, y1i, y2i in zip(x_float, y1_float, y2_float):
                 print(f"x = {xi}, y1 = {y1i}, y2 = {y2i}")
-
-            plt.plot(x_float, y1_float, label="x(t)", color="powderblue")# de la línea 309 a la 316 se da formato a la gráfica
-            plt.plot(x_float, y2_float, label="y(t)", color="darkcyan")
+            # de la línea 309 a la 316 se da formato a la gráfica
+            plt.plot(x_float, y1_float, label="x(t)", color="powderblue")# El color "powderblue" representa a las respuestas obtenidas por el método numérico
+            plt.plot(x_float, y2_float, label="y(t)", color="powderblue")
             plt.xlabel("t")
             plt.ylabel("Valores de x(t) y y(t)")
             plt.title("Método de Runge-Kutta de cuarto orden para $x' = x - y , y' = x + 2y$")
@@ -388,8 +401,8 @@ def menuABM():  # Se encarga de crear el menú de opciones para el método numé
             x_float = [float(xi) for xi in x]# transforma los valores a float para que matplotlib los pueda trabajar 
             y_float = [float(yi) for yi in y]
 
-
-            plt.plot(x_float, y_float, label="Solución ABM", color="violet")# de la línea 377 a la 388 se da formato a la gráfica
+            # de la línea 377 a la 388 se da formato a la gráfica
+            plt.plot(x_float, y_float, label="Solución ABM", color="violet")# El color "violet" representa a las respuestas obtenidas por el método numérico
             plt.xlabel("x")
             plt.ylabel("y")
             plt.title("Método de Adams-Bashforth-Moulton para $y'= y^2 + y(x+1)/x$")
@@ -400,8 +413,9 @@ def menuABM():  # Se encarga de crear el menú de opciones para el método numé
             plt.legend()
             plt.grid(True)
 
+            plt.tight_layout()
             plt.show()
-                           
+            
         elif tipo_operacion == "2":
             # Definir la función para y'' - 4y' + 4y = cos(x)
             def f2(x, y, yprima):
@@ -421,14 +435,29 @@ def menuABM():  # Se encarga de crear el menú de opciones para el método numé
 
             x_float = [float(xi) for xi in x]# transforma los valores a float para que matplotlib los pueda trabajar
             y_float = [float(yi) for yi in y]
-
-            plt.plot(x_float, y_float, label="Solución ABM", color="violet")# de la línea 410 a la 416 se da formato a la gráfica
+            x_data = [0, 0.4, 0.8, 1.2, 1.6, 2.0]#datos de x en los que se evalua la solución analítica
+            y_data = [0, 1, 4, 17, 53, 146] #datos de y que salen como respuesta de sus respectivos datos en x
+            
+            # de la línea x a la x se da formato a la gráfica
+            plt.subplot(2, 1, 1)  # Subplot 1 (2 filas, 1 columna, posición 1)
+            plt.plot(x_data, y_data, linestyle='-', label="Solución Analítica", color="purple")# El color "darkcyan" representa a las respuestas obtenidas por la solución analítica
+            plt.title("Solución Analítica para $y'' - 4y' + 4y = \cos(x)$")
+            plt.xlabel("x")
+            plt.ylabel("y")
+            plt.grid(True)
+            plt.legend()
+            
+            plt.subplot(2, 1, 2) # Subplot 1 (2 filas, 1 columna, posición 2)
+            plt.plot(x_float, y_float, label="Solución ABM", color="violet")# El color "violet" representa a las respuestas obtenidas por el método numérico
             plt.xlabel("x")
             plt.ylabel("y")
             plt.title("Método de Adams-Bashforth-Moulton para $y'' - 4y' + 4y = \cos(x)$")
             plt.legend()
             plt.grid(True)
+            
+            plt.tight_layout()
             plt.show()
+            
         elif tipo_operacion == "3":
             # Definir la función para x' = x - y , y' = x + 2y
             
@@ -454,7 +483,7 @@ def menuABM():  # Se encarga de crear el menú de opciones para el método numé
                 print(f"x = {xi}, y1 = {y1i}, y2 = {y2i}")
 
             plt.plot(x_float, y1_float, label="x(t)", color="violet")# de la línea 441 a la 448 se da formato a la gráfica
-            plt.plot(x_float, y2_float, label="y(t)", color="purple")
+            plt.plot(x_float, y2_float, label="y(t)", color="violet")# El color "violet" representa a las respuestas obtenidas por el método numérico
             plt.xlabel("t")
             plt.ylabel("Valores de x(t) y y(t)")
             plt.title("Método de Adams-Bashforth-Moulton para $x' = x - y , y' = x + 2y$")
