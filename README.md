@@ -12,8 +12,9 @@ Para realizar este proyecto se está utilizando Python como lenguaje de programa
   **PVI:**  y(0) = 0 , y'(0) = 1 
 
 - **Sistema de Ecuaciones Diferenciales:**  
-   x’ = 6x - y 
-   y’ = 5x + 4y   
+   \( x' = 6x - y \)
+
+   \( y' = 5x + 4y \)
   **PVI:**  x(0) = -2 ,  y(0) = 8 
 
 ---
