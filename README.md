@@ -18,10 +18,8 @@ Para realizar este proyecto se está utilizando Python como lenguaje de programa
   
   **PVI:**  x(0) = -2 ,  y(0) = 8 
 
+ Además se incluye el código de LaTex con el cual se realizó el reporte escrito. 
 ---
-Código en Latex del Reporte escrito
----
-
 **Autores:**  
 Fernando Hernández – 23645  
 Fernando Rueda – 23748  
