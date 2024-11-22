@@ -1,0 +1,637 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{geometry}
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\geometry{a4paper, margin=1in}
+\usepackage{ragged2e} 
+\usepackage{setspace} 
+\usepackage{url} 
+\usepackage{hyperref}
+
+\begin{document}
+
+% Cabecera
+\noindent
+\textbf{Universidad del Valle de Guatemala} \\
+Ecuaciones Diferenciales I \\
+Sección 40 \\
+
+\vspace{5cm}
+
+% Título centrado en la hoja
+\begin{center}
+\textbf{\LARGE Proyecto Final: Ecuaciones Diferenciales}
+\end{center}
+
+\vfill
+
+% Nombres al final de la página
+\begin{flushright}
+Fernando Hernández - 23645 \\
+Fernando Rueda - 23748 \\
+Juan Francisco Martínez – 23617 \\
+\end{flushright}
+
+\newpage
+
+% Resumen y contenido
+\section{Resumen}
+\justifying
+En este estudio se analizaron y compararon los métodos numéricos de Runge-Kutta de cuarto orden (RK4) y Adams-Bashforth-Moulton (ABM) aplicados a diferentes tipos de ecuaciones diferenciales. Los resultados se contrastaron con las soluciones analíticas para evaluar la precisión y el rendimiento de ambos métodos.
+
+Para una ecuación diferencial de primer orden, el método ABM demostró mayor precisión que RK4, evidenciada por un menor error cuadrático medio (ECM), especialmente en pasos pequeños. Esto se debe a su etapa correctiva, que permite aproximaciones más cercanas a la solución exacta, aunque ambos métodos mostraron dificultades en regiones con comportamientos complejos.
+
+En la ecuación de segundo orden, al ser lineal y carecer de irregularidades, ambos métodos alcanzaron una alta precisión, destacándose ABM por su ECM más bajo. Sin embargo, RK4 presentó un rendimiento aceptable con un costo computacional menor.
+
+Para un sistema de ecuaciones diferenciales, ambos métodos ofrecieron resultados comparables a la solución analítica. Sin embargo, debido a su menor complejidad computacional, RK4 se perfila como una opción más eficiente.
+
+Este análisis resalta las ventajas y limitaciones de cada método, recomendando ABM para casos que requieren máxima precisión y RK4 como una alternativa eficiente y sencilla cuando los recursos computacionales son limitados.
+
+\section{Introducción}
+\justifying
+Las ecuaciones diferenciales son herramientas matemáticas esenciales para modelar y analizar fenómenos que implican cambios continuos en variables dependientes en relación con variables independientes. Estas ecuaciones desempeñan un papel crucial en diversas áreas de la computación, ya que permiten describir sistemas dinámicos complejos y resolver problemas que requieren simulaciones precisas y detalladas.
+
+En el ámbito de la computación, las ecuaciones diferenciales son fundamentales para modelar fenómenos físicos, biológicos y económicos. Entre sus aplicaciones destacan los gráficos generados por computadora, el análisis de datos y la simulación de fenómenos naturales. Asimismo, tienen una importancia significativa en áreas avanzadas como el diseño de hardware, donde se utilizan para modelar la dinámica de circuitos electrónicos. Por otro lado, en programas dedicados a la predicción y simulación del clima, las ecuaciones diferenciales permiten analizar la evolución de los sistemas atmosféricos de manera precisa.
+
+La incapacidad de resolver analíticamente muchas de estas ecuaciones ha impulsado el desarrollo de métodos numéricos y su implementación en sistemas computacionales, facilitando la solución de problemas. En este contexto, el presente proyecto tiene como objetivo comparar la eficacia de dos métodos numéricos ampliamente utilizados para la solución de ecuaciones diferenciales: el método de Runge-Kutta de cuarto orden (RK4) y el método de Adams-Bashforth-Moulton.
+
+\newpage
+\textbf{Método de Runge-Kutta de Cuarto Orden}
+\justifying
+El método RK4 es un algoritmo de un solo paso que calcula la solución de una ecuación diferencial mediante una combinación ponderada de cuatro evaluaciones de la derivada dentro de cada intervalo. Su precisión se debe a que incorpora información del punto inicial y de puntos intermedios en el intervalo para estimar el valor siguiente. Este método es fácil de implementar, eficiente y preciso.\vspace{0.5cm}
+
+\textbf{Método de Adams-Bashforth-Moulton}
+\justifying
+El método ABM es un método predictor-corrector de múltiples pasos que utiliza información de varios puntos previos para calcular la solución en el siguiente paso. La etapa de predicción aproxima inicialmente la solución, mientras que la etapa de corrección ajusta esa predicción para obtener un resultado más preciso. Este método es útil para problemas en los que ya se dispone de varios valores previos de la solución, para obtener estos valores previos se utiliza el método RK4.
+\section{Explicación de los métodos numéricos}
+\subsection*{Método de Runge-Kutta de Cuarto Orden}
+\justifying
+\textbf{Explicación del método:}
+
+El método RK4 es un método numérico que utiliza varias evaluaciones de la derivada en diferentes puntos dentro de un intervalo para calcular una solución más precisa de ecuaciones diferenciales ordinarias. A diferencia del método de Euler que solo utiliza la pendiente inicial, el RK4 toma promedios ponderados de varios puntos dentro del intervalo lo que da una aproximación más exacta. Este método se define por las siguientes fórmulas:
+
+\[
+y_{n+1} = y_n + \frac{h}{6}(k_1 + k_2 + k_3 + k_4)
+\]
+
+\[
+k_1 = f(x_n, y_n)
+\]
+
+\[
+k_2 = f\left(x_n + \frac{h}{2}, y_n + \frac{h}{2}k_1\right)
+\]
+
+\[
+k_3 = f\left(x_n + \frac{h}{2}, y_n + \frac{h}{2}k_2\right)
+\]
+
+\[
+k_4 = f(x_n + h, y_n + hk_3)
+\]
+
+Este proceso toma en cuenta cuatro aproximaciones de la pendiente en distintos puntos del intervalo y luego calcula un promedio ponderado de estas. El RK4 reduce considerablemente el error truncado local y global al utilizar información más completa del intervalo de integración, esto si se compara con el algoritmo de Euler.
+\newpage
+
+
+\textbf{Alcance:} El método RK4 es una técnica de un solo paso que calcula soluciones aproximadas de ecuaciones diferenciales ordinarias con alta precisión. Es ampliamente utilizado debido a su facilidad de implementación y capacidad para proporcionar resultados con un error truncado bastante bajo. Este método es ideal para problemas donde se requiere precisión en un intervalo relativamente grande y no se dispone de valores previos aparte de las condiciones iniciales.\vspace{0.5cm}
+
+
+
+\textbf{Limitaciones:} El costo computacional es una de sus limitaciones, ya que requiere varias evaluaciones de la función derivada por cada caso, lo que puede ser computacional costoso para problemas complejos o sistemas de ecuaciones diferenciales. También puede ser ineficiente si se selecciona un tamaño de paso demasiado grande (\textit{h}) ya que la respuesta puede volverse inestable.\vspace{0.5cm}
+
+
+
+\textbf{Consideraciones para la convergencia:}
+\begin{itemize}
+    \item Utilizar un tamaño de $h$ adecuado para garantizar la estabilidad y precisión de la solución.
+    \item Asegurar la continuidad y suavidad de la función derivada ya que si esta presenta irregularidades se pueden introducir errores significativos.
+\end{itemize}
+
+\noindent (Zill, 2023) (Métodos de Runge-Kutta - Solución Numérica de Ecuaciones Diferenciales - Mathstools, 2004)
+\section*{Método de Adams-Bashforth-Moulton}
+
+\section*{Explicación del método}
+
+El método de Adams-Bashforth-Moulton es un método numérico predictor-corrector de múltiples pasos que utiliza una combinación de dos fórmulas: una fórmula de predicción, que es el método de Adams-Bashforth, y una fórmula de corrección, que es el método de Adams-Moulton. Este método de cuarto orden proporciona una solución más precisa en comparación con los métodos de un solo paso, ya que utiliza información de varios puntos previos para calcular la solución en el siguiente paso.
+
+Primero se calcula la predicción usando la fórmula de Adams-Bashforth:
+
+\[
+y*_{n+1} = y_n + \frac{h}{24} \left( 55y'_n - 59y'_{n-1} + 37y'_{n-2} - 9y'_{n-3} \right)
+\]
+
+\[
+y'_n = f(x_n, y_n), \quad y'_{n-1} = f(x_{n-1}, y_{n-1}), \quad y'_{n-2} = f(x_{n-2}, y_{n-2}), \quad y'_{n-3} = f(x_{n-3}, y_{n-3})
+\]
+
+Después, se realiza la corrección utilizando la fórmula de Adams-Moulton:
+
+\[
+y_{n+1} = y_n + \frac{h}{24} \left( 9y'_{n+1} + 19y_n - 5y'_{n-1} + y'_{n-2} \right)
+\]
+
+\[
+\tilde{y}_{n+1} = f(x_{n+1}, \tilde{y}_{n+1})
+\]
+
+Es necesario conocer los valores de $y_1$, $y_2$, $y_3$ para poder obtener el valor de $y_4$. El valor de $y_0$ es la condición inicial dada. La manera para calcular los valores de las $y$ es utilizar el método RK4.
+
+\subsection*{Alcance}
+
+Este método predictor-corrector de múltiples pasos es eficiente para problemas donde ya se dispone de valores previos de la solución. Ofrece un mayor rango de precisión si se le compara con otros métodos. Es la combinación de dos métodos, el Adams-Bashforth que se encarga de realizar las predicciones de los valores aproximados, y el Adams-Moulton el cual se encarga de corregir la predicción anterior para reducir el error global.
+
+\subsection*{Limitaciones}
+
+La principal limitación es que el método ABM no es autosuficiente, esto quiere decir que depende de varios valores iniciales los cuales son calculados por otros métodos, generalmente el RK4, esto aumenta la complejidad inicial del cálculo. Es un método muy sensible frente a problemas que decaen o crecen muy rápido y también tiene alta sensibilidad a pasos muy grandes, al igual que el RK4.
+
+\subsection*{Consideraciones para la convergencia}
+
+\begin{itemize}
+    \item Utilizar un tamaño de $h$ adecuado para garantizar la estabilidad y precisión de la solución.
+    \item Los valores iniciales deben de ser calculados con precisión ya que cualquier error en ellos puede propagarse a lo largo de los pasos posteriores.
+    \item Al utilizar el método RK4 para calcular los valores iniciales, es necesario que la función sea continua y que no presente irregularidades.
+\end{itemize}
+
+\noindent (Zill, 2023) (M \& Ogunwobi, 2021)
+\section{Solución Analítica de las Ecuaciones}
+
+\subsection*{Ecuación de Primer Orden}
+
+\[
+x y' - \left(1 + x\right)y = x y^2
+\]
+\[
+y' - y\left(1 + \frac{1}{x}\right)=  y^2
+\]
+\textbf*{Sustituyendo}
+\[
+y = u^{-1}
+\]
+\[
+u'=y^{-2}y'
+\]
+\[
+y'=-\frac{u'}{u^2}
+\]
+\[
+\frac{-xu'}{u^2}-\frac{1+x}{u}=\frac{x}{u^2}
+\]
+\[
+x'+(1+x)u=-x
+\]
+\[
+u' +\left(1 + \frac{1}{x}\right)u=  -1
+\]
+\textbf*{Factor integrante}
+\[
+P(x) = 1+\frac{1}{x}\
+\]
+\[
+Q(x) = -1\
+\]
+\[
+\mu = e^{\int \left(1 + \frac{1}{x}\right) \, dx}\
+\]
+\[
+\mu = xe^x\
+\]
+\textbf*{Reemplazar y resolver}
+\[
+\frac{d}{dx} \left( x e^x u \right) = -x e^x
+\]
+
+\[
+\int \frac{d}{dx} \left( x e^x u \right) \, dx = \int -x e^x \, dx
+\]
+
+\[
+v = x \quad w = e^x dx
+\]
+\[
+dv = dx \quad dw = e^x
+\]
+\[
+\int -x e^x dx = -x e^x - \int e^x dx
+\]
+\[
+\int -x e^x dx  = -e^x (x - 1) + C
+\]
+
+\[
+x e^x u = -e^x (x - 1) + C
+\]
+\[
+u = \frac{-e^x (x - 1) + C}{e^x x}
+\]
+\textbf*{Reemplazar u = y}
+\[
+y = \frac{-e^x (x - 1) + C}{e^x x}
+\]
+\[
+y x = -\frac{e^x x}{C_1 + e^x (x - 1)}
+\]
+
+\textbf*{PVI y(1)=4}
+\[
+y(x) = \frac{4 e^x x}{e - 4 e^x (x - 1)}
+\]
+
+\subsection*{Ecuación de segundo orden}
+
+\[
+y'' - 4y' + 4y = \cos x, \quad y(0) = 0, \quad y'(0) = 1
+\]
+
+\textbf*{Parte homogénea}
+\[
+r^2 - 4r + 4 = 0
+\]
+\[
+(r - 2)^2 = 0
+\]
+\[
+r = 2
+\]
+\[
+y_h = C_1 e^{2x} + C_2 x e^{2x}
+\]
+
+\textbf*{Parte particular}
+\[
+y_p = A \cos x + B \sin x
+\]
+\[
+y_p' = -A \sin x + B \cos x
+\]
+\[
+y_p'' = -A \cos x - B \sin x
+\]
+
+Sustituyendo en la ecuación:
+\[
+-A \cos x - B \sin x + 4A \sin x - 4B \cos x + 4A \cos x + 4B \sin x = \cos x
+\]
+
+Agrupando términos:
+\[
+\cos x (-A - 4B + 4A) + \sin x (-B + 4A + 4B) = \cos x
+\]
+\[
+\cos x (3A - 4B) + \sin x (4A + 3B) = \cos x
+\]
+
+Igualando coeficientes:
+\[
+3A - 4B = 1 \quad \text{(1)}
+\]
+\[
+4A + 3B = 0 \quad \text{(2)}
+\]
+
+De (2):
+\[
+B = -\frac{4A}{3}
+\]
+
+Sustituyendo en (1):
+\[
+3A - 4\left(-\frac{4A}{3}\right) = 1
+\]
+\[
+3A + \frac{16A}{3} = 1
+\]
+\[
+\frac{9A}{3} + \frac{16A}{3} = 1
+\]
+\[
+\frac{25A}{3} = 1 \quad \Rightarrow \quad A = \frac{3}{25}, \quad B = -\frac{4}{25}
+\]
+
+Por lo tanto:
+\[
+y_p = \frac{3}{25} \cos x - \frac{4}{25} \sin x
+\]
+
+\textbf*{Solución general}
+\[
+y(x) = y_h + y_p = C_1 e^{2x} + C_2 x e^{2x} + \frac{3}{25} \cos x - \frac{4}{25} \sin x
+\]
+
+\textbf*{Condiciones iniciales}
+
+Para $y(0)$:
+\[
+y(0) = C_1 + \frac{3}{25} = 0 \quad \Rightarrow \quad C_1 = -\frac{3}{25}
+\]
+
+Para $y'(0)$:
+\[
+y'(x) = 2C_1 e^{2x} + C_2 e^{2x} + 2C_2 x e^{2x} - \frac{3}{25} \sin x - \frac{4}{25} \cos x
+\]
+\[
+y'(0) = 2C_1 + C_2 - \frac{4}{25} = 1
+\]
+\[
+2\left(-\frac{3}{25}\right) + C_2 - \frac{4}{25} = 1
+\]
+\[
+-\frac{6}{25} + C_2 - \frac{4}{25} = 1
+\]
+\[
+C_2 = 1 + \frac{6}{25} + \frac{4}{25} = 1 + \frac{10}{25} = 1 + \frac{2}{5} = \frac{7}{5}
+\]
+
+Finalmente, la solución completa es:
+\[
+y(x) = -\frac{3}{25} e^{2x} + \frac{7}{5} x e^{2x} + \frac{3}{25} \cos x - \frac{4}{25} \sin x
+\]
+
+
+\subsection*{Sistema de Ecuaciones}
+\justifying
+
+\[
+\bar{x}' = 
+\begin{bmatrix}
+6 & -1 \\
+5 & 4 \\
+\end{bmatrix} \bar{x}, \quad 
+\bar{x}(0) = 
+\begin{bmatrix}
+-2 \\
+8 \\
+\end{bmatrix}
+\]
+
+El determinante del sistema se calcula como:
+
+\[
+\det(A - \lambda I) = 
+\begin{vmatrix}
+6-\lambda & -1 \\
+5 & 4-\lambda \\
+\end{vmatrix} = \lambda^2 - 10\lambda + 24
+\]
+
+Las raíces características son:
+
+\[
+\lambda = 5 \pm 2i
+\]
+
+El vector asociado al autovalor \(\lambda = 5+2i\) es:
+
+\[
+\left|
+\begin{matrix}
+1-2i & -1 & 0 \\
+5 & -1-2i & 0 \\
+\end{matrix}
+\right|
+\]
+
+Resolviendo el sistema, se obtiene:
+
+\[
+k_2 = \left(1-2i\right)k_1
+\]
+
+Por lo tanto, el vector propio correspondiente es:
+
+\[
+\bar{k} = 
+\begin{bmatrix}
+1 \\
+1-2i \\
+\end{bmatrix}
+\]
+
+Los vectores \(\bar{B_1}\) y \(\bar{B_2}\) se definen como:
+
+\[
+\bar{B_1} = 
+\begin{bmatrix}
+1 \\
+1 \\
+\end{bmatrix}, \quad 
+\bar{B_2} = 
+\begin{bmatrix}
+0 \\
+-2 \\
+\end{bmatrix} i
+\]
+
+La solución general del sistema es:
+
+\[
+\bar{x}(t) = c_1 e^t 
+\left[
+\bar{B_1} \cos(2t) - \bar{B_2} \sin(2t)
+\right] 
++ c_2 e^t 
+\left[
+\bar{B_2} \cos(2t) + \bar{B_1} \sin(2t)
+\right]
+\]
+
+Los coeficientes se determinan resolviendo el sistema:
+
+\[
+c_1 + c_2 = -2, \quad 3c_1 - c_2 = 8
+\]
+
+Resolviendo:
+
+\[
+c_1 = \frac{3}{2}, \quad c_2 = \frac{-7}{2}
+\]\vspace{0.5cm}
+
+Sustituyendo los valores, la solución final del sistema es:
+
+\[
+\bar{x}(t) = 
+\frac{3}{2} e^t 
+\left[
+\begin{bmatrix}
+1 \\
+1 \\
+\end{bmatrix} 
+\cos(2t) - 
+\begin{bmatrix}
+0 \\
+-2 \\
+\end{bmatrix} 
+\sin(2t)
+\right] 
+- \frac{7}{2} e^t 
+\left[
+\begin{bmatrix}
+0 \\
+-2 \\
+\end{bmatrix} 
+\cos(2t) + 
+\begin{bmatrix}
+1 \\
+1 \\
+\end{bmatrix} 
+\sin(2t)
+\right]
+\]
+
+
+\section{Resultados de la simulación y comparación}
+
+A continuación, se presentan las gráficas obtenidas durante la simulación y comparación de los métodos analíticos y numéricos.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{IMG1.jpg}
+    \caption{Comparación entre Solución Analítica y Método RK4 para $y' = y^2 + \frac{y(x+1)}{x}$
+ con h = 0.01.}
+    Nota: El error cuadrático medio es: $1.48 \times 10^{9942}$
+    \label{fig:img1}
+\end{figure}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{IMG4.jpg}
+    \caption{Comparación entre Solución Analítica y Método RK4 para $y' = y^2 + \frac{y(x+1)}{x}$ con h = 0.1.}
+    Nota: El error cuadrático medio es: $7.46\times 10^{5173}$
+    \label{fig:img4}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{IMG7.jpg}
+    \caption{Comparación entre Solución Analítica y Método ABM para $y' = y^2 + \frac{y(x+1)}{x}$
+ con h = 0.01.}
+    Nota: El error cuadrático medio es: $9.88\times 10^{1255}$
+    \label{fig:img7}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{IMG10.jpg}
+    \caption{Comparación detallada entre soluciones analítica y numérica con Método ABM para $y' = y^2 + \frac{y(x+1)}{x}$ con h = 0.1.}
+    Nota: El error cuadrático medio es: $4.61\times 10^{3286}$
+    \label{fig:img10}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{IMG2.jpg}
+    \caption{Comparación entre Solución Analítica y Método RK4 para $y'' - 4y' + 4y =\cos(x)$ con h = 0.01.}
+    Nota: El error cuadrático medio es: 0.00031
+    \label{fig:img2}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{IMG5.jpg}
+    \caption{Comparación entre Solución Analítica y Método RK4 para $y'' - 4y' + 4y = \cos(x)$ con h = 0.1.}
+    Nota: El error cuadrático medio es: 3.05
+    \label{fig:img5}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{IMG8.jpg}
+    \caption{Comparación entre Solución Analítica y Método ABM para $y'' - 4y' + 4y = \cos(x)$ con h = 0.01.}
+    Nota: El error cuadrático medio es: $8.88\times 10^{-5}$
+    \label{fig:img8}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{IMG11.jpg}
+    \caption{Comparación entre Solución Analítica y Método ABM para $y'' - 4y' + 4y = \cos(x)$con h = 0.1.}
+    Nota: El error cuadrático medio es: 0.015
+    \label{fig:img11}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{IMG3.jpg}
+    \caption{Método de Runge-Kutta de cuarto orden para el sistema $x' = 6x - y$, $y' = 5x + 4y$ con h = 0.01.}
+    Nota: Error cuadrático medio para x1 es: $3.70 \times 10^{19}$
+    
+    Error cuadrático medio para y es: $2.30 \times 10^{20}$
+    \label{fig:img3}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{IMG6.jpg}
+    \caption{Método de Runge-Kutta de cuarto orden para el sistema $x' = 6x - y$, $y' = 5x + 4y$ con h = 0.1.}
+    Nota: Error cuadrático medio para x1 es: $4.21 \times 10^{19}$
+    
+    Error cuadrático medio para y es: $4\times 10^{20}$
+    \label{fig:img6}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{IMG9.jpg}
+    \caption{Método de Adams-Bashforth-Moulton para el sistema $x' = 6x - y$, $y' = 5x + 4y$ con h = 0.01.}
+    Nota: Error cuadrático medio para x1 es: $3.71 \times 10^{19}$
+    
+    Error cuadrático medio para y es: $2.30\times 10^{20}$
+    \label{fig:img9}
+\end{figure}
+
+
+
+
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{IMG12.jpg}
+    \caption{Método de Adams-Bashforth-Moulton $x' = 6x - y$, $y' = 5x + 4y$ con h = 0.01.}
+    Nota: Error cuadrático medio para x1 es: $4.56 \times 10^{19}$
+    
+    Error cuadrático medio para y es: $3.75\times 10^{20}$
+    \label{fig:img12}
+\end{figure}
+\clearpage
+\section{Discusión}
+
+Al comparar las soluciones numéricas con la solución analítica para la ecuación diferencial de primer orden, se observa una discrepancia significativa, reflejada en los valores del error cuadrático medio (ECM). Esta diferencia es especialmente notable en el método ABM con un paso de $h=0.1$, donde el error es considerablemente mayor. Esto se atribuye a la falta de una asíntota en $x=1.21$, una característica que dificulta la convergencia de los métodos numéricos y amplifica los errores en ciertas regiones del dominio. El método ABM, en contraste, mostró una mayor capacidad para acercarse a la solución analítica, particularmente con pasos más pequeños ($h=0.01$). Esto se nota al comparar el ECM obtenido. Sin embargo, ambos métodos pierden precisión en las proximidades de las singularidades, evidenciando las limitaciones de los métodos numéricos frente a la solución exacta en problemas con comportamientos complejos.\vspace{0.5cm}
+
+La ecuación diferencial de segundo orden, al no presentar irregularidades significativas, permitió una comparación más directa entre las soluciones numéricas y la solución analítica. En este caso, ambos métodos mostraron un excelente desempeño, con errores significativamente menores que en el caso de la ecuación de primer orden. Esto demuestra el potencial de los métodos numéricos cuando se aplican a problemas bien condicionados. El método ABM destacó con un error cuadrático medio más bajo en comparación con el RK4, especialmente con pasos pequeños ($h=0.01$). Esto se debe a que ABM, al ser un método predictor-corrector de múltiples pasos, utiliza información adicional para refinar sus cálculos y acercarse más a la solución analítica. Sin embargo, el RK4 sigue siendo competitivo, con una diferencia de error mínima, lo que refuerza su aplicabilidad en escenarios donde se busca un equilibrio entre precisión y costo computacional.\vspace{0.5cm}
+
+En el sistema de ecuaciones diferenciales, los resultados numéricos de ambos métodos fueron notablemente similares a la solución analítica. Esto indica que tanto RK4 como ABM son capaces de manejar sistemas acoplados de ecuaciones con un nivel comparable de precisión. Sin embargo, el método RK4 tiene la ventaja de requerir menos recursos computacionales al no depender de cálculos previos de predicción y corrección. La comparación de errores cuadráticos medios para las variables $x_1$ y $y$ mostró diferencias mínimas entre los métodos, lo que sugiere que, para problemas de este tipo, donde la solución no presenta irregularidades significativas, el RK4 es una opción preferible debido a su simplicidad y eficiencia. La similitud de los resultados con la solución analítica también evidencia que ambos métodos capturan adecuadamente la dinámica del sistema sin introducir errores significativos.\vspace{0.5cm}
+
+\section{Conclusiones}
+\begin{enumerate}
+    \item Es fundamental trabajar con ecuaciones diferenciales que no presenten irregularidades significativas para que los métodos numéricos puedan trabajar de la manera más óptima.
+    \item El tamaño de paso es un factor importante para ambos métodos numéricos, ya que mientras más pequeño se obtienen mejores resultados, esto es más visible en el método RK4.
+    \item Si se tiene algún tipo de limitación computacional, el método más viable para trabajar sería el RK4, ya que sus resultados son muy buenos y no necesitan una gran cantidad de valores iniciales para trabajar.
+    \item Si se tiene que trabajar con los datos más precisos sin importar la limitación computacional, la mejor opción es el ABM ya que al ser un método predictivo-correctivo hace aproximaciones más precisas, como se observa a la hora de calcular el ECM.
+\end{enumerate}
+
+\section*{Referencias}
+\begin{enumerate}
+    \item Antonio Cedillo Hernández. (2020, 20 mayo). \textit{Método de Runge Kutta de cuarto orden} [Vídeo]. YouTube. Recuperado de \url{https://www.youtube.com/watch?v=-1aNhFO1TcQ}
+    \item CK-12 Foundation. (s. f.). \textit{CK-12 Foundation}. Recuperado de \url{https://www.ck12.org/book/ck-12-conceptos-dec%C3%A1lculo-en-espa%C3%B1ol/section/8.14/}
+    \item Cole Kalkowski. (2020, 7 diciembre). \textit{Adams-Bashforth-Moulton Method - Differential equations} [Vídeo]. YouTube. Recuperado de \url{https://www.youtube.com/watch?v=6BMDXOq0zCw}
+    \item Juan José Ríos. (2023, 26 mayo). \textit{Programa el Método de Runge-Kutta orden 4 en Python: Paso a Paso} [Vídeo]. YouTube. Recuperado de \url{https://www.youtube.com/watch?v=v1ktiBkUJeU}
+    \item M, A. O., \& Ogunwobi, Z. (2021). \textit{Comparison of Adams-Bashforth-Moulton Method and Milne-Simpson Method on Second Order Ordinary Differential Equation}. Turkish Journal Of Analysis And Number Theory, 9(1), 1-8. Recuperado de \url{https://doi.org/10.12691/tjant-9-1-1}
+    \item \textit{Métodos de Runge-Kutta - Solución numérica de ecuaciones diferenciales - Mathstools.} (2004, 1 octubre). Recuperado de \url{https://www.mathstools.com/section/main/Metodos_de_Runge_Kutta?lang=es}
+    \item Zill, D. G. (2018). \textit{Ecuaciones diferenciales con aplicaciones de modelado} (11ª ed.). Cengage Learning.
+
+    \section*{Video}
+
+El video relacionado con este trabajo puede verse en el siguiente enlace:
+
+\href{https://youtu.be/BRXy1ELBlwA}{\textbf{https://youtu.be/BRXy1ELBlwA}}
+
+\section*{Repositorio en GitHub}
+
+El código fuente y los archivos del proyecto están disponibles en el siguiente enlace de GitHub: \\
+\href{https://github.com/Cisco890/-Proyecto-Final-Ecuaciones-Diferenciales-1.git}{https://github.com/Cisco890/-Proyecto-Final-Ecuaciones-Diferenciales-1.git}
+\end{enumerate}
+
+\end{document}
